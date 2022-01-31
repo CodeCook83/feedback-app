@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 const FeedbackContext = createContext();
 
 export const FeedbackProvider = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [feedback, setFeedback] = useState([]);
-
   const [feedbackEdit, setFeedbackEdit] = useState({
     item: {},
     edit: false,
@@ -22,7 +22,8 @@ export const FeedbackProvider = ({ children }) => {
         `http://localhost:6001/feedback?_sort=id&_order=desc`
       );
       const data = await response.json();
-      console.log(data);
+      setFeedback(data);
+      setIsLoading(false);
     } catch (err) {
       console.log(err.message);
     }
@@ -57,6 +58,7 @@ export const FeedbackProvider = ({ children }) => {
       value={{
         feedback,
         feedbackEdit,
+        isLoading,
         deleteFeedback,
         addFeedback,
         editFeedback,
